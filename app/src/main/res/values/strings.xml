@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AR-App</string>
+    <!--common-->
+    <string name="text_dialog_ok">ОК</string>
+    <string name="text_dialog_cancel">Отмена</string>
+    <string name="main_greeting">Нажмите старт, чтобы погрузиться в дополненную реальность.\n\n
+    Наведите камеру на логотип Azoft и увидите нечто интересное!</string>
+    <string name="main_button_start">Старт</string>
+    <string name="content_description_image">image</string>
+</resources>
