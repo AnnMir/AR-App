@@ -3,12 +3,12 @@ package com.example.ar_app.ui.common.view.base
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.example.ar_app.R
+import dagger.android.support.DaggerAppCompatActivity
 
-abstract class BaseActivity<DataBinding : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<DataBinding : ViewDataBinding> : DaggerAppCompatActivity() {
 
     protected lateinit var binding: DataBinding
 
