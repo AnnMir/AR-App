@@ -34,7 +34,7 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (!Engine.initialize(this, getString(R.string.KEY))) {
+        if (!Engine.initialize(this, getString(R.string.key))) {
             Log.e("HelloAR", "Initialization Failed.")
             Toast.makeText(this@ImageArActivity, Engine.errorMessage(), Toast.LENGTH_LONG).show()
             return
