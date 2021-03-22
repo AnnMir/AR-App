@@ -55,7 +55,7 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
             return
         }
 
-        glView = GLView(this, presenter.getVideos())
+        glView = GLView(this, presenter.getVideos(), presenter.getImages())
 
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
@@ -128,6 +128,11 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
         }
         super.onPause()
     }
+
+//    override fun onDestroy() {
+//        presenter.dispose()
+//        super.onDestroy()
+//    }
 
     override fun getFilesFromAssets(): Array<String>? {
         return assets.list("")

@@ -10,8 +10,8 @@ package com.example.ar_app.easyar
 import android.opengl.GLES20
 import android.util.Log
 import cn.easyar.*
-import com.example.ar_app.ui.ar.model.Video
-import com.example.ar_app.ui.ar.presenter.ImageArPresenter
+import com.example.ar_app.data.Video
+import com.example.ar_app.data.Image
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -37,9 +37,10 @@ class HelloAR {
     private var imageBytes: ByteArray? = null
 
     private var videos: List<Video>? = null
+    private var images: List<Image>? = null
 
-    private fun loadFromImage(tracker: ImageTracker, path: String = ImageArPresenter.DEFAULT_IMAGE_PATH, name: String = ImageArPresenter.DEFAULT_IMAGE_NAME) {
-        val target = ImageTarget.createFromImageFile(path, 1, name, "", "", 1.0f)
+    private fun loadFromImage(tracker: ImageTracker, image: Image) {
+        val target = ImageTarget.createFromImageFile(image.path, 1, image.name, "", "", 1.0f)
         if (target == null) {
             Log.e("HelloAR", "target create failed or key is not correct")
             return
@@ -90,7 +91,7 @@ class HelloAR {
         }
     }
 
-    fun initialize(videoList: List<Video>?) {
+    fun initialize(videoList: List<Video>?, imageList: List<Image>?) {
         recreate_context()
         camera = CameraDeviceSelector.createCameraDevice(CameraDevicePreference.PreferObjectSensing)
         throttler = InputFrameThrottler.create()
@@ -108,7 +109,8 @@ class HelloAR {
             return
         }
         val tracker = ImageTracker.create()
-        loadFromImage(tracker)
+        images = imageList
+        images?.forEach { loadFromImage(tracker, it) }
         trackers.add(tracker)
         feedbackFrameFork = FeedbackFrameFork.create(trackers.size)
         camera!!.inputFrameSource().connect(throttler!!.input())
@@ -247,13 +249,15 @@ class HelloAR {
                             if (tracked_target == 0) {
                                 if (video == null && video_renderers!!.size > 0) {
                                     val target_name = target.name()
-                                    if (target_name == "azoft" && video_renderers!![0].texId() !== 0) {
-                                        video = ARVideo(videos)
-                                        video?.openVideoFile(
-                                            video_renderers!![0].texId(),
-                                            scheduler
-                                        )
-                                        current_video_renderer = video_renderers!![0]
+                                    images?.forEachIndexed { index, img ->
+                                        if(img.name == target_name && video_renderers!![index].texId() != 0) {
+                                            video = ARVideo(videos)
+                                            video?.openVideoFile(
+                                                video_renderers!![index].texId(),
+                                                scheduler
+                                            )
+                                            current_video_renderer = video_renderers!![index]
+                                        }
                                     }
                                 }
                                 if (video != null) {

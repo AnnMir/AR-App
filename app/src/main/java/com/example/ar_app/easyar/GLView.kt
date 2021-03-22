@@ -24,9 +24,10 @@ import android.view.Surface
 import android.view.WindowManager
 
 import cn.easyar.Engine
-import com.example.ar_app.ui.ar.model.Video
+import com.example.ar_app.data.Image
+import com.example.ar_app.data.Video
 
-class GLView(context: Context, videos: List<Video>?) : GLSurfaceView(context) {
+class GLView(context: Context, videos: List<Video>?, images: List<Image>?) : GLSurfaceView(context) {
     private val lock = Any()
     private var finishing = false
 
@@ -59,7 +60,7 @@ class GLView(context: Context, videos: List<Video>?) : GLSurfaceView(context) {
                 if (!initialized) {
                     initialized = true
                     helloAR = HelloAR()
-                    helloAR!!.initialize(videos)
+                    helloAR!!.initialize(videos, images)
                 } else {
                     helloAR!!.recreate_context()
                 }
