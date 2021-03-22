@@ -2,7 +2,7 @@ package com.example.ar_app.easyar
 
 import android.util.Log
 import cn.easyar.*
-import com.example.ar_app.ui.ar.model.Video
+import com.example.ar_app.data.Video
 
 class ARVideo(private val videos: List<Video>?) {
 
@@ -68,7 +68,7 @@ class ARVideo(private val videos: List<Video>?) {
     fun onLost() {
         found = false
         if (prepared) {
-            player.pause()
+            player.close()
             changeVideo()
         }
     }
