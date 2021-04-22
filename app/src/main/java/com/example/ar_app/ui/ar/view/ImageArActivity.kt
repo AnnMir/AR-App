@@ -39,19 +39,19 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
 
         if (!Engine.initialize(this, getString(R.string.key))) {
             Log.e("HelloAR", "Initialization Failed.")
-            showMessageDialog(message = Engine.errorMessage())
+            showMessageDialog(Engine.errorMessage())
             return
         }
         if (!CameraDevice.isAvailable()) {
-            showMessageDialog(R.string.error_camera_title, R.string.error_camera)
+            showMessageDialog(R.string.error_camera)
             return
         }
         if (!ImageTracker.isAvailable()) {
-            showMessageDialog(R.string.error_image_tracker_title, R.string.error_image_tracker)
+            showMessageDialog(R.string.error_image_tracker)
             return
         }
         if (!VideoPlayer.isAvailable()) {
-            showMessageDialog(R.string.error_video_player_title, R.string.error_video_player)
+            showMessageDialog(R.string.error_video_player)
             return
         }
 
@@ -66,7 +66,10 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
                 )
             }
 
-            override fun onFailure() {}
+            override fun onFailure() {
+                showMessageDialog(messageId = R.string.error_camera_permission_denied)
+                return
+            }
         })
     }
 

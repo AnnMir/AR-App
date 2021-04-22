@@ -2,6 +2,7 @@ package com.example.ar_app.ui.common.view.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -24,26 +25,26 @@ abstract class BaseActivity<DataBinding : ViewDataBinding> : DaggerAppCompatActi
         binding = DataBindingUtil.setContentView(this, getLayoutId())
     }
 
-    fun showMessageDialog(titleId: Int? = null, messageId: Int) {
-        showMessageDialog(titleId?.let { getString(it) }, getString(messageId))
+    fun showMessageDialog(messageId: Int) {
+        showMessageDialog(getString(messageId))
     }
 
-    fun showMessageDialog(title: String? = null, message: String) {
-        showMessageDialog(title, message)
+    fun showMessageDialog(message: String) {
+        showMessageDialog(null, message)
     }
 
-    inline fun showMessageDialog(
+    fun showMessageDialog(
         title: String?,
         message: String,
-        crossinline positiveAction: () -> Unit = {},
-        crossinline negativeAction: () -> Unit = {}
+        @StringRes positiveButtonRes: Int = R.string.text_dialog_ok,
+        positiveAction: (() -> Unit)? = null
     ) {
         AlertDialog.Builder(this)
             .apply {
                 setTitle(title)
                 setMessage(message)
-                setPositiveButton(R.string.text_dialog_ok) { _, _ -> positiveAction.invoke() }
-                setNegativeButton(R.string.text_dialog_cancel) { _, _ -> negativeAction.invoke() }
+                setPositiveButton(positiveButtonRes) { _, _ -> positiveAction?.invoke() }
+                setCancelable(false)
             }.show()
     }
 }
