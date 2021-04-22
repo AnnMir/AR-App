@@ -7,6 +7,15 @@
     Наведите камеру на логотип Azoft и увидите нечто интересное!</string>
     <string name="main_button_start">Старт</string>
     <string name="content_description_image">image</string>
-    <string name="key">key
-</string>
+    <!-- errors -->
+    <string name="error_empty_resources">Видео и/или изображения не найдены</string>
+    <string name="error_camera_title">Камера недоступна</string>
+    <string name="error_camera">Проверьте работу камеры и предоставленные разрешения в настройках приложения</string>
+    <string name="error_image_tracker_title">Трекер изображения недоступен</string>
+    <string name="error_image_tracker">Нет возможности для запуска трекера изображения</string>
+    <string name="error_video_player_title">Ошибка видеопроигрывателя</string>
+    <string name="error_video_player">Нет возможности для запуска видеопроигрывателя</string>
+
+    <!-- key -->
+    <string name="key">key</string>
 </resources>

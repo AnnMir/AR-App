@@ -1,5 +1,7 @@
 package com.example.ar_app.ui.main.di
 
+import com.example.ar_app.data.Image
+import com.example.ar_app.data.Video
 import com.example.ar_app.di.ActivityScope
 import com.example.ar_app.ui.main.presenter.MainPresenter
 import com.example.ar_app.ui.main.presenter.MainPresenterImpl
@@ -22,6 +24,10 @@ abstract class MainModule {
         @JvmStatic
         @Provides
         @ActivityScope
-        fun provideMainPresenter(mainView: MainView): MainPresenter = MainPresenterImpl(mainView)
+        fun provideMainPresenter(
+            mainView: MainView,
+            images: List<Image>?,
+            videos: List<Video>?
+        ): MainPresenter = MainPresenterImpl(mainView, images, videos)
     }
 }

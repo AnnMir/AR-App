@@ -18,8 +18,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainView {
     override fun setupUI() {
         super.setupUI()
         binding.buttonStart.setOnClickListener {
-            val intent = Intent(this, ImageArActivity::class.java)
-            startActivity(intent)
+            presenter.onStartClick()
         }
+    }
+
+    override fun toImageArActivity() {
+        val intent = Intent(this, ImageArActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun showErrorMessage(msg: Int) {
+        showMessageDialog(messageId = msg)
     }
 }

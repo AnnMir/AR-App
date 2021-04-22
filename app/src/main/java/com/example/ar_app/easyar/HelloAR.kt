@@ -251,7 +251,7 @@ class HelloAR {
                                     val target_name = target.name()
                                     images?.forEachIndexed { index, img ->
                                         if(img.name == target_name && video_renderers!![index].texId() != 0) {
-                                            video = ARVideo(videos)
+                                            video = videos?.let { ARVideo(it) }
                                             video?.openVideoFile(
                                                 video_renderers!![index].texId(),
                                                 scheduler

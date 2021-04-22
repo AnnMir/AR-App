@@ -4,7 +4,7 @@ import android.util.Log
 import cn.easyar.*
 import com.example.ar_app.data.Video
 
-class ARVideo(private val videos: List<Video>?) {
+class ARVideo(private val videos: List<Video>) {
 
     private val player: VideoPlayer
     private var prepared: Boolean
@@ -45,7 +45,7 @@ class ARVideo(private val videos: List<Video>?) {
     }
 
     fun setVideoStatus(status: Int) {
-        Log.i("HelloAR", "video: " + path + " (" + Integer.toString(status) + ")")
+        Log.i("HelloAR", "video: $path ($status)")
         if (status == VideoStatus.Ready) {
             prepared = true
             if (found) {
@@ -80,24 +80,18 @@ class ARVideo(private val videos: List<Video>?) {
         player.updateFrame()
     }
 
-    fun changeVideo() {
+    private fun changeVideo() {
         path = getRandomVideo()
         player.open(
             path!!, StorageType.Assets, scheduler!!
         ) { status -> setVideoStatus(status) }
     }
 
-    private fun getRandomVideo(): String {
-        return videos?.random()?.path ?: DEFAULT_VIDEO
-    }
+    private fun getRandomVideo(): String = videos.random().path
 
     init {
         player = VideoPlayer()
         prepared = false
         found = false
-    }
-
-    companion object {
-        const val DEFAULT_VIDEO = "Sea.mp4"
     }
 }

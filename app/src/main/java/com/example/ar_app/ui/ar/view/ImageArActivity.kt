@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import cn.easyar.*
 import com.example.ar_app.R
 import com.example.ar_app.databinding.ActivityImageArBinding
@@ -20,43 +19,51 @@ import javax.inject.Inject
 
 class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
 
-    private var glView: GLView? = null
-
     @Inject
     lateinit var presenter: ImageArPresenter
+
+    @Inject
+    lateinit var glView: GLView
 
     override fun getLayoutId(): Int = R.layout.activity_image_ar
 
     override fun setupUI() {
         super.setupUI()
-        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (!Engine.initialize(this, getString(R.string.key))) {
             Log.e("HelloAR", "Initialization Failed.")
-            Toast.makeText(this@ImageArActivity, Engine.errorMessage(), Toast.LENGTH_LONG).show()
+            showMessageDialog(message = Engine.errorMessage())
             return
         }
         if (!CameraDevice.isAvailable()) {
-            Toast.makeText(this@ImageArActivity, "CameraDevice not available.", Toast.LENGTH_LONG).show()
+            showMessageDialog(R.string.error_camera_title, R.string.error_camera)
             return
         }
         if (!ImageTracker.isAvailable()) {
-            Toast.makeText(this@ImageArActivity, "ImageTracker not available.", Toast.LENGTH_LONG).show()
+            showMessageDialog(R.string.error_image_tracker_title, R.string.error_image_tracker)
             return
         }
         if (!VideoPlayer.isAvailable()) {
-            Toast.makeText(this@ImageArActivity, "VideoPlayer not available.", Toast.LENGTH_LONG).show()
+            showMessageDialog(R.string.error_video_player_title, R.string.error_video_player)
             return
         }
 
-        glView = GLView(this, presenter.getVideos(), presenter.getImages())
-
         requestCameraPermission(object : PermissionCallback {
             override fun onSuccess() {
-                findViewById<ViewGroup>(R.id.preview).addView(glView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                findViewById<ViewGroup>(R.id.preview).addView(
+                    glView,
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                )
             }
 
             override fun onFailure() {}
@@ -64,8 +71,8 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) {
-             finish()
+        if (item.itemId == android.R.id.home) {
+            finish()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -78,6 +85,7 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
 
     private val permissionCallbacks = HashMap<Int, PermissionCallback>()
     private var permissionRequestCodeSerial = 0
+
     @TargetApi(23)
     private fun requestCameraPermission(callback: PermissionCallback) {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -94,7 +102,11 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (permissionCallbacks.containsKey(requestCode)) {
             val callback = permissionCallbacks[requestCode]!!
             permissionCallbacks.remove(requestCode)
@@ -114,19 +126,16 @@ class ImageArActivity : BaseActivity<ActivityImageArBinding>(), ImageArView {
 
     override fun onResume() {
         super.onResume()
-        if (glView != null) {
-            glView!!.onResume()
-        }
+        glView.onResume()
     }
 
     override fun onPause() {
-        if (glView != null) {
-            glView!!.onPause()
-        }
+        glView.onPause()
         super.onPause()
     }
 
-    override fun getFilesFromAssets(): Array<String>? {
-        return assets.list("")
+    override fun onStop() {
+        findViewById<ViewGroup>(R.id.preview).removeView(glView)
+        super.onStop()
     }
 }

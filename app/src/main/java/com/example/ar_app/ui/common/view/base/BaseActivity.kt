@@ -24,12 +24,12 @@ abstract class BaseActivity<DataBinding : ViewDataBinding> : DaggerAppCompatActi
         binding = DataBindingUtil.setContentView(this, getLayoutId())
     }
 
-    fun showMessageDialog(messageId: Int) {
-        showMessageDialog(getString(messageId))
+    fun showMessageDialog(titleId: Int? = null, messageId: Int) {
+        showMessageDialog(titleId?.let { getString(it) }, getString(messageId))
     }
 
-    fun showMessageDialog(message: String) {
-        showMessageDialog(null, message)
+    fun showMessageDialog(title: String? = null, message: String) {
+        showMessageDialog(title, message)
     }
 
     inline fun showMessageDialog(
